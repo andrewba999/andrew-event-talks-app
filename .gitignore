@@ -1,0 +1,5 @@
+# Gemini CLI specific files and directories
+.gemini/
+
+# Temporary or generated files
+eclipse-dates.txt

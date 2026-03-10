@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technical Talks Event Schedule</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 1em 0;
+            text-align: center;
+        }
+
+        h1, h2 {
+            color: #333;
+        }
+
+        main {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .search-container {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        #category-search {
+            padding: 10px;
+            width: 80%;
+            max-width: 500px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1em;
+        }
+
+        .schedule-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .talk-card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .talk-card h2 {
+            margin-top: 0;
+            color: #0056b3;
+        }
+
+        .talk-card p {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .talk-card .time {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .talk-card .speakers {
+            font-style: italic;
+            color: #666;
+        }
+
+        .talk-card .category {
+            background-color: #e0f7fa;
+            color: #007bb5;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            display: inline-block;
+            margin-top: 10px;
+        }
+
+        .break-card {
+            background-color: #e9ecef;
+            border: 1px dashed #ced4da;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .break-card h2 {
+            color: #495057;
+            margin-top: 0;
+        }
+
+        .break-card .time {
+            font-weight: bold;
+            color: #6c757d;
+        }
+
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 1em 0;
+            margin-top: 20px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .schedule-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>1-Day Technical Talks Event</h1>
+        <p>Your ultimate guide to cutting-edge technology and insights.</p>
+    </header>
+
+    <main>
+        <section class="search-container">
+            <input type="text" id="category-search" placeholder="Search by category (e.g., AI, Web Development)">
+        </section>
+
+        <section id="schedule-container" class="schedule-container">
+            <!-- Schedule will be dynamically loaded here -->
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Technical Talks Event. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const talksData = [
+                {
+                    "id": "talk1",
+                    "title": "The Future of AI in Software Development",
+                    "speakers": ["Dr. Ada Lovelace"],
+                    "category": ["AI", "Software Development", "Future"],
+                    "duration": 60,
+                    "description": "An insightful look into how artificial intelligence is shaping the landscape of software engineering, from automated code generation to intelligent debugging."
+                },
+                {
+                    "id": "talk2",
+                    "title": "Mastering Modern JavaScript Frameworks",
+                    "speakers": ["John Doe"],
+                    "category": ["JavaScript", "Web Development", "Frameworks"],
+                    "duration": 60,
+                    "description": "A deep dive into the latest features and best practices for popular JavaScript frameworks like React, Vue, and Angular."
+                },
+                {
+                    "id": "talk3",
+                    "title": "Cloud Native Architectures with Kubernetes",
+                    "speakers": ["Jane Smith", "Robert Johnson"],
+                    "category": ["Cloud", "DevOps", "Kubernetes"],
+                    "duration": 60,
+                    "description": "Explore the principles of cloud-native development and how Kubernetes can help you build scalable and resilient applications."
+                },
+                {
+                    "id": "talk4",
+                    "title": "Cybersecurity Essentials for Developers",
+                    "speakers": ["Alice Wonderland"],
+                    "category": ["Cybersecurity", "Development", "Security"],
+                    "duration": 60,
+                    "description": "Learn critical cybersecurity practices and common vulnerabilities that every developer should know to build secure software."
+                },
+                {
+                    "id": "talk5",
+                    "title": "Data Science with Python: Beyond the Basics",
+                    "speakers": ["Bob The Builder"],
+                    "category": ["Data Science", "Python", "Machine Learning"],
+                    "duration": 60,
+                    "description": "Move past introductory concepts and delve into advanced data science techniques using Python, including machine learning workflows and data visualization."
+                },
+                {
+                    "id": "talk6",
+                    "title": "Optimizing Database Performance",
+                    "speakers": ["Charlie Chaplin"],
+                    "category": ["Databases", "Performance", "Optimization"],
+                    "duration": 60,
+                    "description": "Strategies and tools for identifying and resolving database performance bottlenecks in various database systems."
+                }
+            ];
+
+            const scheduleContainer = document.getElementById('schedule-container');
+            const categorySearchInput = document.getElementById('category-search');
+
+            function formatTime(date) {
+                return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            }
+
+            function generateSchedule(filterCategory = '') {
+                scheduleContainer.innerHTML = ''; // Clear previous schedule
+
+                let currentTime = new Date();
+                currentTime.setHours(10, 0, 0, 0); // Start at 10:00 AM
+
+                const scheduleItems = [];
+                let talkIndex = 0;
+
+                for (let i = 0; i < talksData.length + 1; i++) { // +1 for lunch break
+                    if (i === Math.floor(talksData.length / 2)) { // Insert lunch break in the middle
+                        const lunchStartTime = new Date(currentTime);
+                        const lunchEndTime = new Date(lunchStartTime.getTime() + (60 * 60 * 1000)); // 1 hour lunch
+                        scheduleItems.push({
+                            type: 'break',
+                            title: 'Lunch Break',
+                            startTime: formatTime(lunchStartTime),
+                            endTime: formatTime(lunchEndTime),
+                            duration: 60
+                        });
+                        currentTime = new Date(lunchEndTime);
+                    }
+
+                    if (talkIndex < talksData.length) {
+                        const talk = talksData[talkIndex];
+                        const talkCategoryMatches = talk.category.some(cat =>
+                            cat.toLowerCase().includes(filterCategory.toLowerCase())
+                        );
+
+                        if (!filterCategory || talkCategoryMatches) {
+                            const talkStartTime = new Date(currentTime);
+                            const talkEndTime = new Date(talkStartTime.getTime() + (talk.duration * 60 * 1000));
+
+                            scheduleItems.push({
+                                type: 'talk',
+                                ...talk,
+                                startTime: formatTime(talkStartTime),
+                                endTime: formatTime(talkEndTime)
+                            });
+
+                            currentTime = new Date(talkEndTime);
+                            if (talkIndex < talksData.length - 1) { // Add transition after talk, not after last talk
+                                currentTime = new Date(currentTime.getTime() + (10 * 60 * 1000)); // 10 min transition
+                            }
+                        }
+                        talkIndex++;
+                    }
+                }
+
+                renderSchedule(scheduleItems);
+            }
+
+            function renderSchedule(items) {
+                items.forEach(item => {
+                    if (item.type === 'talk') {
+                        const talkElement = document.createElement('div');
+                        talkElement.classList.add('talk-card');
+                        talkElement.innerHTML = `
+                            <p class="time">${item.startTime} - ${item.endTime}</p>
+                            <h2>${item.title}</h2>
+                            <p class="speakers">Speaker(s): ${item.speakers.join(', ')}</p>
+                            <p>${item.description}</p>
+                            <p>Category: ${item.category.map(cat => `<span class="category">${cat}</span>`).join(' ')}</p>
+                        `;
+                        scheduleContainer.appendChild(talkElement);
+                    } else if (item.type === 'break') {
+                        const breakElement = document.createElement('div');
+                        breakElement.classList.add('break-card');
+                        breakElement.innerHTML = `
+                            <p class="time">${item.startTime} - ${item.endTime}</p>
+                            <h2>${item.title}</h2>
+                            <p>Duration: ${item.duration} minutes</p>
+                        `;
+                        scheduleContainer.appendChild(breakElement);
+                    }
+                });
+            }
+
+            // Initial schedule generation
+            generateSchedule();
+
+            // Event listener for search input
+            categorySearchInput.addEventListener('input', (event) => {
+                generateSchedule(event.target.value);
+            });
+        });
+    </script>
+</body>
+</html>
